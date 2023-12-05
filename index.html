@@ -1,0 +1,3620 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <link rel="stylesheet" href="css/leaflet-panel-layers.css" />
+        <link rel="stylesheet" href="css/icons.css" />
+
+    
+    
+    </head>
+        
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        .leaflet-popup-content {
+            width: auto !important;
+            padding-right: 10px !important;
+            max-width: 600px; /* Set the maximum width as per your requirement */
+            max-height: 1000px;
+        }
+
+         .leaflet-popup-content-wrapper {
+            max-width: 600px; /* Set the maximum width as per your requirement */
+            max-height: 1000px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/TotalSoilcarbon_4.js"></script>
+        <script src="data/Totalcarbonstocksat1metre_5.js"></script>
+        <script src="data/TotalpeatCarbon_6.js"></script>
+        <script src="data/Soilprofiledepth_7.js"></script>
+        <script src="data/PeatDepth_8.js"></script>
+        <script src="data/EstateBoundary_9.js"></script>
+        <script src="data/Archeologicalzones_10.js"></script>
+        <script src="data/PlantedArea2020_11.js"></script>
+        <script src="data/ExitsingDeerFences_12.js"></script>
+        <script src="data/Potentialnewplantareas_13.js"></script>
+        <script src="data/ExitingStockFences_14.js"></script>
+        <script src="data/Badgersets_15.js"></script>
+        <script src="data/Treesplanted_16.js"></script>
+        <script src="data/Nativewoodlandsplanted2020_17.js"></script>
+        <script src="data/HabitatandLandCovermapforScotland2020_18.js"></script>
+        <script src="data/Areasofbarepeat_19.js"></script>
+        <script src="data/Soiltypes_20.js"></script>
+        <script src="data/LandCoverMapofScotland1988_21.js"></script>
+        <script src="data/MountainWillow_22.js"></script>
+        <script src="data/Grazinfimpactsonflush_23.js"></script>
+        <script src="data/Grazingimpactsonsmoothgrass_24.js"></script>
+        <script src="data/Grazingimpactsontallherb_25.js"></script>
+        <script src="data/CarbonandPeatlandMap2016_26.js"></script>
+        <script src="data/SACGlenLochey_27.js"></script>
+        <script src="data/TopsoilOrganicCarbon_28.js"></script>
+        <script src="data/SSSIGlenLochay_29.js"></script>
+        <script src="data/NativeWoodlandModel_30.js"></script>
+        <script src="data/NationalVegetationClassification_31.js"></script>
+        <script src="data/Merlinnestingarea_32.js"></script>
+        <script src="data/BirdsRedListedSGP6015_33.js"></script>
+        <script src="data/BirdsRedAmberSGP6015_34.js"></script>
+        <script src="data/Rivers_2.js"></script>
+        <script src="data/Otters_3.js"></script>
+        <script src="js/leaflet-panel-layers.js"></script>
+        <script src="js/jquery.js"></script> 
+
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[56.39097753497399,-4.74038793663577],[56.565908079192695,-4.323272369692632]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'feet',
+            secondaryLengthUnit: 'miles',
+            primaryAreaUnit: 'sqfeet',
+            secondaryAreaUnit: 'sqmiles'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_OSMOutdoors_0');
+        map.getPane('pane_OSMOutdoors_0').style.zIndex = 400;
+        var layer_OSMOutdoors_0 = L.tileLayer('https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=6305e7026ec1413aa0e11069f9dfcb03', {
+            pane: 'pane_OSMOutdoors_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 25
+        });
+        layer_OSMOutdoors_0;
+        map.addLayer(layer_OSMOutdoors_0);
+        map.createPane('pane_OSBasemap_1');
+        map.getPane('pane_OSBasemap_1').style.zIndex = 401;
+        var img_OSBasemap_1 = 'data/OSBasemap_1.png';
+        var img_bounds_OSBasemap_1 = [[56.429332551921796,-4.637598899338953],[56.52401344400377,-4.467021174846026]];
+        var layer_OSBasemap_1 = new L.imageOverlay(img_OSBasemap_1,
+                                              img_bounds_OSBasemap_1,
+                                              {pane: 'pane_OSBasemap_1'});
+        bounds_group.addLayer(layer_OSBasemap_1);
+        map.addLayer(layer_OSBasemap_1);
+        map.createPane('pane_OSOpenMapLocal_2');
+        map.getPane('pane_OSOpenMapLocal_2').style.zIndex = 402;
+        var img_OSOpenMapLocal_2 = 'data/OSOpenMapLocal_2.png';
+        var img_bounds_OSOpenMapLocal_2 = [[56.4293323800635,-4.637607953040243],[56.524027392309506,-4.4669968751294995]];
+        var layer_OSOpenMapLocal_2 = new L.imageOverlay(img_OSOpenMapLocal_2,
+                                              img_bounds_OSOpenMapLocal_2,
+                                              {pane: 'pane_OSOpenMapLocal_2'});
+        bounds_group.addLayer(layer_OSOpenMapLocal_2);
+        map.addLayer(layer_OSOpenMapLocal_2);
+        map.createPane('pane_Effectiveairflowheights_1');
+        map.getPane('pane_Effectiveairflowheights_1').style.zIndex = 403;
+        var img_Effectiveairflowheights_1 = 'data/Effectiveairflowheights_1.png';
+        var img_bounds_Effectiveairflowheights_1 = [[56.429501762609156,-4.637559786324126],[56.523972131358285,-4.467473807701116]];
+        var layer_Effectiveairflowheights_1 = new L.imageOverlay(img_Effectiveairflowheights_1,
+                                              img_bounds_Effectiveairflowheights_1,
+                                              {pane: 'pane_Effectiveairflowheights_1'});
+        bounds_group.addLayer(layer_Effectiveairflowheights_1);
+        map.createPane('pane_WindEffect_2');
+        map.getPane('pane_WindEffect_2').style.zIndex = 404;
+        var img_WindEffect_2 = 'data/WindEffect_2.png';
+        var img_bounds_WindEffect_2 = [[56.429501762609156,-4.637559786324126],[56.523972131358285,-4.467473807701116]];
+        var layer_WindEffect_2 = new L.imageOverlay(img_WindEffect_2,
+                                              img_bounds_WindEffect_2,
+                                              {pane: 'pane_WindEffect_2'});
+        bounds_group.addLayer(layer_WindEffect_2);
+        map.createPane('pane_WindExposition_3');
+        map.getPane('pane_WindExposition_3').style.zIndex = 405;
+        var img_WindExposition_3 = 'data/WindExposition_3.png';
+        var img_bounds_WindExposition_3 = [[56.429501762609156,-4.637559786324126],[56.523972131358285,-4.467473807701116]];
+        var layer_WindExposition_3 = new L.imageOverlay(img_WindExposition_3,
+                                              img_bounds_WindExposition_3,
+                                              {pane: 'pane_WindExposition_3'});
+        bounds_group.addLayer(layer_WindExposition_3);
+        function pop_TotalSoilcarbon_4(feature, layer) {
+        }
+
+        function style_TotalSoilcarbon_4_0(feature) {
+            if (feature.properties['q2wHide_DN'] >= 96461.000000 && feature.properties['q2wHide_DN'] <= 200851.714286 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,250,250,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 200851.714286 && feature.properties['q2wHide_DN'] <= 243321.857143 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,209,209,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 243321.857143 && feature.properties['q2wHide_DN'] <= 298273.857143 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,168,168,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 298273.857143 && feature.properties['q2wHide_DN'] <= 357761.142857 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,128,128,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 357761.142857 && feature.properties['q2wHide_DN'] <= 444058.571429 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(87,87,87,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 444058.571429 && feature.properties['q2wHide_DN'] <= 558046.000000 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,46,46,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 558046.000000 && feature.properties['q2wHide_DN'] <= 1266979.000000 ) {
+                return {
+                pane: 'pane_TotalSoilcarbon_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,5,5,0.7)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TotalSoilcarbon_4');
+        map.getPane('pane_TotalSoilcarbon_4').style.zIndex = 404;
+        map.getPane('pane_TotalSoilcarbon_4').style['mix-blend-mode'] = 'normal';
+        var layer_TotalSoilcarbon_4 = new L.geoJson(json_TotalSoilcarbon_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TotalSoilcarbon_4',
+            layerName: 'layer_TotalSoilcarbon_4',
+            pane: 'pane_TotalSoilcarbon_4',
+            onEachFeature: pop_TotalSoilcarbon_4,
+            style: style_TotalSoilcarbon_4_0,
+        });
+        bounds_group.addLayer(layer_TotalSoilcarbon_4);
+        function pop_Totalcarbonstocksat1metre_5(feature, layer) {
+        }
+
+        function style_Totalcarbonstocksat1metre_5_0(feature) {
+            if (feature.properties['q2wHide_DN'] >= 0.000000 && feature.properties['q2wHide_DN'] <= 206195.666667 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,250,250,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 206195.666667 && feature.properties['q2wHide_DN'] <= 261138.000000 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(201,201,201,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 261138.000000 && feature.properties['q2wHide_DN'] <= 323900.000000 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,152,152,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 323900.000000 && feature.properties['q2wHide_DN'] <= 411328.666667 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,103,103,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 411328.666667 && feature.properties['q2wHide_DN'] <= 537336.500000 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(54,54,54,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 537336.500000 && feature.properties['q2wHide_DN'] <= 1258429.000000 ) {
+                return {
+                pane: 'pane_Totalcarbonstocksat1metre_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,5,5,0.8)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Totalcarbonstocksat1metre_5');
+        map.getPane('pane_Totalcarbonstocksat1metre_5').style.zIndex = 405;
+        map.getPane('pane_Totalcarbonstocksat1metre_5').style['mix-blend-mode'] = 'normal';
+        var layer_Totalcarbonstocksat1metre_5 = new L.geoJson(json_Totalcarbonstocksat1metre_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Totalcarbonstocksat1metre_5',
+            layerName: 'layer_Totalcarbonstocksat1metre_5',
+            pane: 'pane_Totalcarbonstocksat1metre_5',
+            onEachFeature: pop_Totalcarbonstocksat1metre_5,
+            style: style_Totalcarbonstocksat1metre_5_0,
+        });
+        bounds_group.addLayer(layer_Totalcarbonstocksat1metre_5);
+        function pop_TotalpeatCarbon_6(feature, layer) {
+        }
+
+        function style_TotalpeatCarbon_6_0(feature) {
+            if (feature.properties['q2wHide_DN'] >= 425300.000000 && feature.properties['q2wHide_DN'] <= 498947.142857 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,209,209,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 498947.142857 && feature.properties['q2wHide_DN'] <= 549699.000000 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,168,168,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 549699.000000 && feature.properties['q2wHide_DN'] <= 612649.000000 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,128,128,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 612649.000000 && feature.properties['q2wHide_DN'] <= 670436.000000 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(87,87,87,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 670436.000000 && feature.properties['q2wHide_DN'] <= 756320.428571 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,46,46,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 756320.428571 && feature.properties['q2wHide_DN'] <= 1184345.000000 ) {
+                return {
+                pane: 'pane_TotalpeatCarbon_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,5,5,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TotalpeatCarbon_6');
+        map.getPane('pane_TotalpeatCarbon_6').style.zIndex = 406;
+        map.getPane('pane_TotalpeatCarbon_6').style['mix-blend-mode'] = 'normal';
+        var layer_TotalpeatCarbon_6 = new L.geoJson(json_TotalpeatCarbon_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TotalpeatCarbon_6',
+            layerName: 'layer_TotalpeatCarbon_6',
+            pane: 'pane_TotalpeatCarbon_6',
+            onEachFeature: pop_TotalpeatCarbon_6,
+            style: style_TotalpeatCarbon_6_0,
+        });
+        bounds_group.addLayer(layer_TotalpeatCarbon_6);
+        function pop_Soilprofiledepth_7(feature, layer) {
+        }
+
+        function style_Soilprofiledepth_7_0(feature) {
+            if (feature.properties['q2wHide_DN'] >= 41.000000 && feature.properties['q2wHide_DN'] <= 50.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,250,250,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 50.000000 && feature.properties['q2wHide_DN'] <= 53.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,209,209,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 53.000000 && feature.properties['q2wHide_DN'] <= 55.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,168,168,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 55.000000 && feature.properties['q2wHide_DN'] <= 58.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,128,128,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 58.000000 && feature.properties['q2wHide_DN'] <= 61.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(87,87,87,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 61.000000 && feature.properties['q2wHide_DN'] <= 65.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,46,46,0.8)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 65.000000 && feature.properties['q2wHide_DN'] <= 105.000000 ) {
+                return {
+                pane: 'pane_Soilprofiledepth_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,5,5,0.8)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Soilprofiledepth_7');
+        map.getPane('pane_Soilprofiledepth_7').style.zIndex = 407;
+        map.getPane('pane_Soilprofiledepth_7').style['mix-blend-mode'] = 'normal';
+        var layer_Soilprofiledepth_7 = new L.geoJson(json_Soilprofiledepth_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Soilprofiledepth_7',
+            layerName: 'layer_Soilprofiledepth_7',
+            pane: 'pane_Soilprofiledepth_7',
+            onEachFeature: pop_Soilprofiledepth_7,
+            style: style_Soilprofiledepth_7_0,
+        });
+        bounds_group.addLayer(layer_Soilprofiledepth_7);
+        function pop_PeatDepth_8(feature, layer) {
+        }
+
+        function style_PeatDepth_8_0(feature) {
+            if (feature.properties['q2wHide_DN'] >= 5.000000 && feature.properties['q2wHide_DN'] <= 25.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,250,250,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 25.000000 && feature.properties['q2wHide_DN'] <= 45.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,209,209,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 45.000000 && feature.properties['q2wHide_DN'] <= 51.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,168,168,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 51.000000 && feature.properties['q2wHide_DN'] <= 55.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,128,128,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 55.000000 && feature.properties['q2wHide_DN'] <= 58.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(87,87,87,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 58.000000 && feature.properties['q2wHide_DN'] <= 60.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,46,46,0.7)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_DN'] >= 60.000000 && feature.properties['q2wHide_DN'] <= 105.000000 ) {
+                return {
+                pane: 'pane_PeatDepth_8',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,5,5,0.7)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_PeatDepth_8');
+        map.getPane('pane_PeatDepth_8').style.zIndex = 408;
+        map.getPane('pane_PeatDepth_8').style['mix-blend-mode'] = 'normal';
+        var layer_PeatDepth_8 = new L.geoJson(json_PeatDepth_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PeatDepth_8',
+            layerName: 'layer_PeatDepth_8',
+            pane: 'pane_PeatDepth_8',
+            onEachFeature: pop_PeatDepth_8,
+            style: style_PeatDepth_8_0,
+        });
+        bounds_group.addLayer(layer_PeatDepth_8);
+        function pop_EstateBoundary_9(feature, layer) {
+        }
+
+        function style_EstateBoundary_9_0() {
+            return {
+                pane: 'pane_EstateBoundary_9',
+                opacity: 1,
+                color: 'rgba(228,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_EstateBoundary_9');
+        map.getPane('pane_EstateBoundary_9').style.zIndex = 409;
+        map.getPane('pane_EstateBoundary_9').style['mix-blend-mode'] = 'normal';
+        var layer_EstateBoundary_9 = new L.geoJson(json_EstateBoundary_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_EstateBoundary_9',
+            layerName: 'layer_EstateBoundary_9',
+            pane: 'pane_EstateBoundary_9',
+            onEachFeature: pop_EstateBoundary_9,
+            style: style_EstateBoundary_9_0,
+        });
+        bounds_group.addLayer(layer_EstateBoundary_9);
+        map.addLayer(layer_EstateBoundary_9);
+        function pop_Archeologicalzones_10(feature, layer) {
+        }
+
+        function style_Archeologicalzones_10_0() {
+            return {
+                pane: 'pane_Archeologicalzones_10',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,188,122,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Archeologicalzones_10');
+        map.getPane('pane_Archeologicalzones_10').style.zIndex = 410;
+        map.getPane('pane_Archeologicalzones_10').style['mix-blend-mode'] = 'normal';
+        var layer_Archeologicalzones_10 = new L.geoJson(json_Archeologicalzones_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Archeologicalzones_10',
+            layerName: 'layer_Archeologicalzones_10',
+            pane: 'pane_Archeologicalzones_10',
+            onEachFeature: pop_Archeologicalzones_10,
+            style: style_Archeologicalzones_10_0,
+        });
+        bounds_group.addLayer(layer_Archeologicalzones_10);
+        function pop_PlantedArea2020_11(feature, layer) {
+        }
+
+        function style_PlantedArea2020_11_0() {
+            return {
+                pane: 'pane_PlantedArea2020_11',
+                opacity: 1,
+                color: 'rgba(207,66,184,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,180,60,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PlantedArea2020_11');
+        map.getPane('pane_PlantedArea2020_11').style.zIndex = 411;
+        map.getPane('pane_PlantedArea2020_11').style['mix-blend-mode'] = 'normal';
+        var layer_PlantedArea2020_11 = new L.geoJson(json_PlantedArea2020_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PlantedArea2020_11',
+            layerName: 'layer_PlantedArea2020_11',
+            pane: 'pane_PlantedArea2020_11',
+            onEachFeature: pop_PlantedArea2020_11,
+            style: style_PlantedArea2020_11_0,
+        });
+        bounds_group.addLayer(layer_PlantedArea2020_11);
+        function pop_ExitsingDeerFences_12(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID_1'] !== null ? autolinker.link(feature.properties['ID_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Area in Ha</strong><br />' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_ExitsingDeerFences_12_0() {
+            return {
+                pane: 'pane_ExitsingDeerFences_12',
+                opacity: 1,
+                color: 'rgba(77,137,73,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ExitsingDeerFences_12');
+        map.getPane('pane_ExitsingDeerFences_12').style.zIndex = 412;
+        map.getPane('pane_ExitsingDeerFences_12').style['mix-blend-mode'] = 'normal';
+        var layer_ExitsingDeerFences_12 = new L.geoJson(json_ExitsingDeerFences_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ExitsingDeerFences_12',
+            layerName: 'layer_ExitsingDeerFences_12',
+            pane: 'pane_ExitsingDeerFences_12',
+            onEachFeature: pop_ExitsingDeerFences_12,
+            style: style_ExitsingDeerFences_12_0,
+        });
+        bounds_group.addLayer(layer_ExitsingDeerFences_12);
+        function pop_Potentialnewplantareas_13(feature, layer) {
+        }
+
+        var pattern_Potentialnewplantareas_13_0 = new L.StripePattern({
+            weight: 0.9,
+            spaceWeight: 2.0,
+            color: '#000000',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Potentialnewplantareas_13_0.addTo(map);
+        function style_Potentialnewplantareas_13_0() {
+            return {
+                pane: 'pane_Potentialnewplantareas_13',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Potentialnewplantareas_13_0,
+                interactive: true,
+            }
+        }
+        function style_Potentialnewplantareas_13_1() {
+            return {
+                pane: 'pane_Potentialnewplantareas_13',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Potentialnewplantareas_13');
+        map.getPane('pane_Potentialnewplantareas_13').style.zIndex = 413;
+        map.getPane('pane_Potentialnewplantareas_13').style['mix-blend-mode'] = 'normal';
+        var layer_Potentialnewplantareas_13 = new L.geoJson.multiStyle(json_Potentialnewplantareas_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Potentialnewplantareas_13',
+            layerName: 'layer_Potentialnewplantareas_13',
+            pane: 'pane_Potentialnewplantareas_13',
+            onEachFeature: pop_Potentialnewplantareas_13,
+            styles: [style_Potentialnewplantareas_13_0,style_Potentialnewplantareas_13_1,]
+        });
+        bounds_group.addLayer(layer_Potentialnewplantareas_13);
+        function pop_ExitingStockFences_14(feature, layer) {
+        }
+
+        function style_ExitingStockFences_14_0() {
+            return {
+                pane: 'pane_ExitingStockFences_14',
+                opacity: 1,
+                color: 'rgba(145,225,52,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 6.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        function style_ExitingStockFences_14_1() {
+            return {
+                pane: 'pane_ExitingStockFences_14',
+                opacity: 1,
+                color: 'rgba(65,90,54,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ExitingStockFences_14');
+        map.getPane('pane_ExitingStockFences_14').style.zIndex = 414;
+        map.getPane('pane_ExitingStockFences_14').style['mix-blend-mode'] = 'normal';
+        var layer_ExitingStockFences_14 = new L.geoJson.multiStyle(json_ExitingStockFences_14, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ExitingStockFences_14',
+            layerName: 'layer_ExitingStockFences_14',
+            pane: 'pane_ExitingStockFences_14',
+            onEachFeature: pop_ExitingStockFences_14,
+            styles: [style_ExitingStockFences_14_0,style_ExitingStockFences_14_1,]
+        });
+        bounds_group.addLayer(layer_ExitingStockFences_14);
+        function pop_Badgersets_15(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>id</strong><br />' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Badgersets_15_0() {
+            return {
+                pane: 'pane_Badgersets_15',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,91,167,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Badgersets_15');
+        map.getPane('pane_Badgersets_15').style.zIndex = 415;
+        map.getPane('pane_Badgersets_15').style['mix-blend-mode'] = 'normal';
+        var layer_Badgersets_15 = new L.geoJson(json_Badgersets_15, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Badgersets_15',
+            layerName: 'layer_Badgersets_15',
+            pane: 'pane_Badgersets_15',
+            onEachFeature: pop_Badgersets_15,
+            style: style_Badgersets_15_0,
+        });
+        bounds_group.addLayer(layer_Badgersets_15);
+        function pop_Treesplanted_16(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Photo</strong><br />' + (feature.properties['Path'] !== null ? '<img src="images/' + String(feature.properties['Path']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Compartment</strong><br />' + (feature.properties['Compar'] !== null ? autolinker.link(feature.properties['Compar'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Plot</strong><br />' + (feature.properties['Plot'] !== null ? autolinker.link(feature.properties['Plot'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Grid reference</strong><br />' + (feature.properties['8figGR'] !== null ? autolinker.link(feature.properties['8figGR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Treesplanted_16_0() {
+            return {
+                pane: 'pane_Treesplanted_16',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,176,74,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Treesplanted_16');
+        map.getPane('pane_Treesplanted_16').style.zIndex = 416;
+        map.getPane('pane_Treesplanted_16').style['mix-blend-mode'] = 'normal';
+        var layer_Treesplanted_16 = new L.geoJson(json_Treesplanted_16, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Treesplanted_16',
+            layerName: 'layer_Treesplanted_16',
+            pane: 'pane_Treesplanted_16',
+            onEachFeature: pop_Treesplanted_16,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Treesplanted_16_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Treesplanted_16);
+        function pop_Nativewoodlandsplanted2020_17(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Type</strong><br />' + (feature.properties['IFT_IOA'] !== null ? autolinker.link(feature.properties['IFT_IOA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Nativewoodlandsplanted2020_17_0(feature) {
+            switch(String(feature.properties['IFT_IOA'])) {
+                case 'Assumed woodland':
+                    return {
+                pane: 'pane_Nativewoodlandsplanted2020_17',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(136,238,140,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Broadleaved':
+                    return {
+                pane: 'pane_Nativewoodlandsplanted2020_17',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(110,28,218,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Conifer':
+                    return {
+                pane: 'pane_Nativewoodlandsplanted2020_17',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(22,168,213,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Ground prep':
+                    return {
+                pane: 'pane_Nativewoodlandsplanted2020_17',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(224,203,96,0.6)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Nativewoodlandsplanted2020_17',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,27,98,0.6)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Nativewoodlandsplanted2020_17');
+        map.getPane('pane_Nativewoodlandsplanted2020_17').style.zIndex = 417;
+        map.getPane('pane_Nativewoodlandsplanted2020_17').style['mix-blend-mode'] = 'normal';
+        var layer_Nativewoodlandsplanted2020_17 = new L.geoJson(json_Nativewoodlandsplanted2020_17, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Nativewoodlandsplanted2020_17',
+            layerName: 'layer_Nativewoodlandsplanted2020_17',
+            pane: 'pane_Nativewoodlandsplanted2020_17',
+            onEachFeature: pop_Nativewoodlandsplanted2020_17,
+            style: style_Nativewoodlandsplanted2020_17_0,
+        });
+        bounds_group.addLayer(layer_Nativewoodlandsplanted2020_17);
+        function pop_HabitatandLandCovermapforScotland2020_18(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Area in hectares</strong><br />' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_HabitatandLandCovermapforScotland2020_18_0(feature) {
+            switch(String(feature.properties['q2wHide_DN'])) {
+                case '1':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(28,29,255,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '2':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(52,52,34,0.18941176470588234)',
+                interactive: true,
+            }
+                    break;
+                case '3':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(41,58,38,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '5':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(178,191,113,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '6':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,204,118,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '7':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,207,118,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '8':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(164,139,180,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '9':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(197,163,89,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '10':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,13,196,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '11':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,169,102,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '12':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(127,20,8,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '14':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(34,78,51,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '15':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(48,99,65,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '16':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(55,116,75,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '18':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(186,140,72,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '19':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(178,120,58,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '20':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,127,63,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '21':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,6,3,0.7)',
+                interactive: true,
+            }
+                    break;
+                case '23':
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(108,108,108,0.7)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(217,222,76,0.7)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_HabitatandLandCovermapforScotland2020_18');
+        map.getPane('pane_HabitatandLandCovermapforScotland2020_18').style.zIndex = 418;
+        map.getPane('pane_HabitatandLandCovermapforScotland2020_18').style['mix-blend-mode'] = 'normal';
+        var layer_HabitatandLandCovermapforScotland2020_18 = new L.geoJson(json_HabitatandLandCovermapforScotland2020_18, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_HabitatandLandCovermapforScotland2020_18',
+            layerName: 'layer_HabitatandLandCovermapforScotland2020_18',
+            pane: 'pane_HabitatandLandCovermapforScotland2020_18',
+            onEachFeature: pop_HabitatandLandCovermapforScotland2020_18,
+            style: style_HabitatandLandCovermapforScotland2020_18_0,
+        });
+        bounds_group.addLayer(layer_HabitatandLandCovermapforScotland2020_18);
+        function pop_Areasofbarepeat_19(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Area in square meters</strong><br />' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Areasofbarepeat_19_0() {
+            return {
+                pane: 'pane_Areasofbarepeat_19',
+                opacity: 1,
+                color: 'rgba(247,247,247,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(82,82,82,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Areasofbarepeat_19');
+        map.getPane('pane_Areasofbarepeat_19').style.zIndex = 419;
+        map.getPane('pane_Areasofbarepeat_19').style['mix-blend-mode'] = 'normal';
+        var layer_Areasofbarepeat_19 = new L.geoJson(json_Areasofbarepeat_19, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Areasofbarepeat_19',
+            layerName: 'layer_Areasofbarepeat_19',
+            pane: 'pane_Areasofbarepeat_19',
+            onEachFeature: pop_Areasofbarepeat_19,
+            style: style_Areasofbarepeat_19_0,
+        });
+        bounds_group.addLayer(layer_Areasofbarepeat_19);
+        function pop_Soiltypes_20(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Description</strong><br />' + (feature.properties['MAPLEGEND'] !== null ? autolinker.link(feature.properties['MAPLEGEND'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Soiltypes_20_0(feature) {
+            switch(String(feature.properties['MAPSYMB13'])) {
+                case 'HIP':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,170,0,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'IMMA':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(178,178,178,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'LOCH':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(151,219,242,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'MONT':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(130,130,130,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'PEAT':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,0,76,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'PTYGLEY':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(56,168,0,0.7)',
+                interactive: true,
+            }
+                    break;
+                case 'PTYPODZ':
+                    return {
+                pane: 'pane_Soiltypes_20',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,0.7)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Soiltypes_20');
+        map.getPane('pane_Soiltypes_20').style.zIndex = 402;
+        map.getPane('pane_Soiltypes_20').style['mix-blend-mode'] = 'normal';
+        var layer_Soiltypes_20 = new L.geoJson(json_Soiltypes_20, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Soiltypes_20',
+            layerName: 'layer_Soiltypes_20',
+            pane: 'pane_Soiltypes_20',
+            onEachFeature: pop_Soiltypes_20,
+            style: style_Soiltypes_20_0,
+        });
+        bounds_group.addLayer(layer_Soiltypes_20);
+        function pop_LandCoverMapofScotland1988_21(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>LCS_LABEL</strong><br />' + (feature.properties['LCS_LABEL'] !== null ? autolinker.link(feature.properties['LCS_LABEL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 0.66,
+            spaceWeight: 5.0,
+            color: '#6987ef',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 5.0,
+            color: '#6dbb43',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 5.0,
+            color: '#000000',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 270
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 1.2,
+            spaceWeight: 5.0,
+            color: '#e39e00',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 5.0,
+            color: '#00734c',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 5.0,
+            color: '#a900e6',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        var pattern_LandCoverMapofScotland1988_21_1 = new L.StripePattern({
+            weight: 0.8,
+            spaceWeight: 5.0,
+            color: '#267300',
+            opacity: 0.6,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_LandCoverMapofScotland1988_21_1.addTo(map);
+        function style_LandCoverMapofScotland1988_21_0(feature) {
+            switch(String(feature.properties['LCS_LABEL'])) {
+                case 'blanket bog & peatlands':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'broadleaved woodland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'cliffs':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'coarse grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(132,208,159,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'coniferous plantation':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,255,0.0)',
+                interactive: true,
+            }
+                    break;
+                case 'heather moor':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,255,0.0)',
+                interactive: true,
+            }
+                    break;
+                case 'improved grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(112,168,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'montane vegetation':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,255,0.0)',
+                interactive: true,
+            }
+                    break;
+                case 'other land':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,225,225,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'smooth grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(56,168,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'water':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(151,219,242,0.6)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        function style_LandCoverMapofScotland1988_21_1(feature) {
+            switch(String(feature.properties['LCS_LABEL'])) {
+                case 'blanket bog & peatlands':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'broadleaved woodland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'cliffs':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'coarse grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'coniferous plantation':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'heather moor':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'improved grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(0,0,0,0.6)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'montane vegetation':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_LandCoverMapofScotland1988_21_1,
+                interactive: true,
+            }
+                    break;
+                case 'other land':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(130,130,130,0.6)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'smooth grassland':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(0,0,0,0.6)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'water':
+                    return {
+                pane: 'pane_LandCoverMapofScotland1988_21',
+                opacity: 1,
+                color: 'rgba(64,101,235,0.6)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_LandCoverMapofScotland1988_21');
+        map.getPane('pane_LandCoverMapofScotland1988_21').style.zIndex = 421;
+        map.getPane('pane_LandCoverMapofScotland1988_21').style['mix-blend-mode'] = 'normal';
+        var layer_LandCoverMapofScotland1988_21 = new L.geoJson.multiStyle(json_LandCoverMapofScotland1988_21, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_LandCoverMapofScotland1988_21',
+            layerName: 'layer_LandCoverMapofScotland1988_21',
+            pane: 'pane_LandCoverMapofScotland1988_21',
+            onEachFeature: pop_LandCoverMapofScotland1988_21,
+            styles: [style_LandCoverMapofScotland1988_21_0,style_LandCoverMapofScotland1988_21_1,]
+        });
+        bounds_group.addLayer(layer_LandCoverMapofScotland1988_21);
+        function pop_MountainWillow_22(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>PLACENAME</strong><br />' + (feature.properties['PLACENAME'] !== null ? autolinker.link(feature.properties['PLACENAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>DATE_</strong><br />' + (feature.properties['DATE_'] !== null ? autolinker.link(feature.properties['DATE_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MountainWillow_22_0() {
+            return {
+                pane: 'pane_MountainWillow_22',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,72,75,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MountainWillow_22');
+        map.getPane('pane_MountainWillow_22').style.zIndex = 422;
+        map.getPane('pane_MountainWillow_22').style['mix-blend-mode'] = 'normal';
+        var layer_MountainWillow_22 = new L.geoJson(json_MountainWillow_22, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MountainWillow_22',
+            layerName: 'layer_MountainWillow_22',
+            pane: 'pane_MountainWillow_22',
+            onEachFeature: pop_MountainWillow_22,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_MountainWillow_22_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MountainWillow_22);
+        function pop_Grazinfimpactsonflush_23(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>M_GRAZE</strong><br />' + (feature.properties['M_GRAZE'] !== null ? autolinker.link(feature.properties['M_GRAZE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Grazinfimpactsonflush_23_0(feature) {
+            switch(String(feature.properties['M_GRAZE'])) {
+                case 'L':
+                    return {
+                pane: 'pane_Grazinfimpactsonflush_23',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(33,148,127,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'M':
+                    return {
+                pane: 'pane_Grazinfimpactsonflush_23',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,244,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ML':
+                    return {
+                pane: 'pane_Grazinfimpactsonflush_23',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,217,106,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Grazinfimpactsonflush_23');
+        map.getPane('pane_Grazinfimpactsonflush_23').style.zIndex = 423;
+        map.getPane('pane_Grazinfimpactsonflush_23').style['mix-blend-mode'] = 'normal';
+        var layer_Grazinfimpactsonflush_23 = new L.geoJson(json_Grazinfimpactsonflush_23, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Grazinfimpactsonflush_23',
+            layerName: 'layer_Grazinfimpactsonflush_23',
+            pane: 'pane_Grazinfimpactsonflush_23',
+            onEachFeature: pop_Grazinfimpactsonflush_23,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Grazinfimpactsonflush_23_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Grazinfimpactsonflush_23);
+        function pop_Grazingimpactsonsmoothgrass_24(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>M_GRAZE</strong><br />' + (feature.properties['M_GRAZE'] !== null ? autolinker.link(feature.properties['M_GRAZE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Grazingimpactsonsmoothgrass_24_0(feature) {
+            switch(String(feature.properties['M_GRAZE'])) {
+                case 'H':
+                    return {
+                pane: 'pane_Grazingimpactsonsmoothgrass_24',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'HM':
+                    return {
+                pane: 'pane_Grazingimpactsonsmoothgrass_24',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,174,97,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'M':
+                    return {
+                pane: 'pane_Grazingimpactsonsmoothgrass_24',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(249,249,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ML':
+                    return {
+                pane: 'pane_Grazingimpactsonsmoothgrass_24',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,217,106,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'L':
+                    return {
+                pane: 'pane_Grazingimpactsonsmoothgrass_24',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(26,150,65,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Grazingimpactsonsmoothgrass_24');
+        map.getPane('pane_Grazingimpactsonsmoothgrass_24').style.zIndex = 424;
+        map.getPane('pane_Grazingimpactsonsmoothgrass_24').style['mix-blend-mode'] = 'normal';
+        var layer_Grazingimpactsonsmoothgrass_24 = new L.geoJson(json_Grazingimpactsonsmoothgrass_24, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Grazingimpactsonsmoothgrass_24',
+            layerName: 'layer_Grazingimpactsonsmoothgrass_24',
+            pane: 'pane_Grazingimpactsonsmoothgrass_24',
+            onEachFeature: pop_Grazingimpactsonsmoothgrass_24,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Grazingimpactsonsmoothgrass_24_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Grazingimpactsonsmoothgrass_24);
+        function pop_Grazingimpactsontallherb_25(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>PLOT_CODE</strong><br />' + (feature.properties['PLOT_CODE'] !== null ? autolinker.link(feature.properties['PLOT_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>M_GRAZE</strong><br />' + (feature.properties['M_GRAZE'] !== null ? autolinker.link(feature.properties['M_GRAZE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Grazingimpactsontallherb_25_0(feature) {
+            switch(String(feature.properties['M_GRAZE'])) {
+                case 'L':
+                    return {
+                pane: 'pane_Grazingimpactsontallherb_25',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(26,150,65,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ML':
+                    return {
+                pane: 'pane_Grazingimpactsontallherb_25',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(120,190,153,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Grazingimpactsontallherb_25');
+        map.getPane('pane_Grazingimpactsontallherb_25').style.zIndex = 425;
+        map.getPane('pane_Grazingimpactsontallherb_25').style['mix-blend-mode'] = 'normal';
+        var layer_Grazingimpactsontallherb_25 = new L.geoJson(json_Grazingimpactsontallherb_25, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Grazingimpactsontallherb_25',
+            layerName: 'layer_Grazingimpactsontallherb_25',
+            pane: 'pane_Grazingimpactsontallherb_25',
+            onEachFeature: pop_Grazingimpactsontallherb_25,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Grazingimpactsontallherb_25_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Grazingimpactsontallherb_25);
+        function pop_CarbonandPeatlandMap2016_26(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>COMPSOIL</strong><br />' + (feature.properties['COMPSOIL'] !== null ? autolinker.link(feature.properties['COMPSOIL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CarbonandPeatlandMap2016_26_0(feature) {
+            switch(String(feature.properties['q2wHide_IMPORTANCE'])) {
+                case '1':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(115,226,167,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,226,167,0.6)',
+                interactive: true,
+            }
+                    break;
+                case '2':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(231,181,17,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,181,17,0.6)',
+                interactive: true,
+            }
+                    break;
+                case '3':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(73,37,235,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(73,37,235,0.6)',
+                interactive: true,
+            }
+                    break;
+                case '5':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(208,32,202,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(208,32,202,0.6)',
+                interactive: true,
+            }
+                    break;
+                case '0':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(228,131,139,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(228,131,139,0.6)',
+                interactive: true,
+            }
+                    break;
+                case '-2':
+                    return {
+                pane: 'pane_CarbonandPeatlandMap2016_26',
+                opacity: 1,
+                color: 'rgba(85,183,232,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,183,232,0.6)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CarbonandPeatlandMap2016_26');
+        map.getPane('pane_CarbonandPeatlandMap2016_26').style.zIndex = 426;
+        map.getPane('pane_CarbonandPeatlandMap2016_26').style['mix-blend-mode'] = 'normal';
+        var layer_CarbonandPeatlandMap2016_26 = new L.geoJson(json_CarbonandPeatlandMap2016_26, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CarbonandPeatlandMap2016_26',
+            layerName: 'layer_CarbonandPeatlandMap2016_26',
+            pane: 'pane_CarbonandPeatlandMap2016_26',
+            onEachFeature: pop_CarbonandPeatlandMap2016_26,
+            style: style_CarbonandPeatlandMap2016_26_0,
+        });
+        bounds_group.addLayer(layer_CarbonandPeatlandMap2016_26);
+        function pop_SACGlenLochey_27(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Name</strong><br />' + (feature.properties['SITE_NAME'] !== null ? autolinker.link(feature.properties['SITE_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SACGlenLochey_27_0() {
+            return {
+                pane: 'pane_SACGlenLochey_27',
+                opacity: 1,
+                color: 'rgba(82,82,82,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(204,204,204,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SACGlenLochey_27');
+        map.getPane('pane_SACGlenLochey_27').style.zIndex = 427;
+        map.getPane('pane_SACGlenLochey_27').style['mix-blend-mode'] = 'normal';
+        var layer_SACGlenLochey_27 = new L.geoJson(json_SACGlenLochey_27, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SACGlenLochey_27',
+            layerName: 'layer_SACGlenLochey_27',
+            pane: 'pane_SACGlenLochey_27',
+            onEachFeature: pop_SACGlenLochey_27,
+            style: style_SACGlenLochey_27_0,
+        });
+        bounds_group.addLayer(layer_SACGlenLochey_27);
+        function pop_TopsoilOrganicCarbon_28(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Top soil organic Carbon (%)</strong><br />' + (feature.properties['OrganicC_1'] !== null ? autolinker.link(feature.properties['OrganicC_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_TopsoilOrganicCarbon_28_0(feature) {
+            if (feature.properties['q2wHide_organicCar'] >= 0.160000 && feature.properties['q2wHide_organicCar'] <= 1.500000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                opacity: 1,
+                color: 'rgba(255,255,127,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,127,0.6)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_organicCar'] >= 1.500000 && feature.properties['q2wHide_organicCar'] <= 3.000000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,221,93,0.6)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_organicCar'] >= 3.000000 && feature.properties['q2wHide_organicCar'] <= 5.000000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,186,62,0.6)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_organicCar'] >= 5.000000 && feature.properties['q2wHide_organicCar'] <= 12.000000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                opacity: 1,
+                color: 'rgba(214,133,34,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(214,133,34,0.6)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_organicCar'] >= 12.000000 && feature.properties['q2wHide_organicCar'] <= 35.000000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                opacity: 1,
+                color: 'rgba(158,68,16,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(158,68,16,0.6)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_organicCar'] >= 35.000000 && feature.properties['q2wHide_organicCar'] <= 55.740000 ) {
+                return {
+                pane: 'pane_TopsoilOrganicCarbon_28',
+                opacity: 1,
+                color: 'rgba(107,6,0,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(107,6,0,0.6)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TopsoilOrganicCarbon_28');
+        map.getPane('pane_TopsoilOrganicCarbon_28').style.zIndex = 428;
+        map.getPane('pane_TopsoilOrganicCarbon_28').style['mix-blend-mode'] = 'normal';
+        var layer_TopsoilOrganicCarbon_28 = new L.geoJson(json_TopsoilOrganicCarbon_28, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TopsoilOrganicCarbon_28',
+            layerName: 'layer_TopsoilOrganicCarbon_28',
+            pane: 'pane_TopsoilOrganicCarbon_28',
+            onEachFeature: pop_TopsoilOrganicCarbon_28,
+            style: style_TopsoilOrganicCarbon_28_0,
+        });
+        bounds_group.addLayer(layer_TopsoilOrganicCarbon_28);
+        function pop_SSSIGlenLochay_29(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>TYPE</strong><br />' + (feature.properties['TYPE'] !== null ? autolinker.link(feature.properties['TYPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_SSSIGlenLochay_29_0 = new L.StripePattern({
+            weight: 0.5,
+            spaceWeight: 2.0,
+            color: '#000000',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_SSSIGlenLochay_29_0.addTo(map);
+        function style_SSSIGlenLochay_29_0() {
+            return {
+                pane: 'pane_SSSIGlenLochay_29',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_SSSIGlenLochay_29_0,
+                interactive: true,
+            }
+        }
+        function style_SSSIGlenLochay_29_1() {
+            return {
+                pane: 'pane_SSSIGlenLochay_29',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SSSIGlenLochay_29');
+        map.getPane('pane_SSSIGlenLochay_29').style.zIndex = 429;
+        map.getPane('pane_SSSIGlenLochay_29').style['mix-blend-mode'] = 'normal';
+        var layer_SSSIGlenLochay_29 = new L.geoJson.multiStyle(json_SSSIGlenLochay_29, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SSSIGlenLochay_29',
+            layerName: 'layer_SSSIGlenLochay_29',
+            pane: 'pane_SSSIGlenLochay_29',
+            onEachFeature: pop_SSSIGlenLochay_29,
+            styles: [style_SSSIGlenLochay_29_0,style_SSSIGlenLochay_29_1,]
+        });
+        bounds_group.addLayer(layer_SSSIGlenLochay_29);
+        function pop_NativeWoodlandModel_30(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NVCTEXT</strong><br />' + (feature.properties['NVCTEXT'] !== null ? autolinker.link(feature.properties['NVCTEXT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_NativeWoodlandModel_30_0(feature) {
+            switch(String(feature.properties['q2wHide_NEWNVC'])) {
+                case 'Water':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W7':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,144,16,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W4/W17/W18':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                interactive: true,
+            }
+                    break;
+                case 'W4/Sc5/W17/W18':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                opacity: 1,
+                color: 'rgba(240,249,230,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,170,102,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W4/Sc5':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,170,102,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W4/a':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,112,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W4':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,170,102,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W18/W4':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W18/W17':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W18/Sc5':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W17/W4':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,115,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W17/W18':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,115,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W17/W11':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,115,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W17':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,115,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W11/W7':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W11/W17':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W11':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,0,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'U':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,225,225,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc5/W4':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,190,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc5/W18':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,190,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc5':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,190,255,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc4':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,190,190,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc3':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,190,190,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Sc1':
+                    return {
+                pane: 'pane_NativeWoodlandModel_30',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(80,174,209,0.6)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_NativeWoodlandModel_30');
+        map.getPane('pane_NativeWoodlandModel_30').style.zIndex = 430;
+        map.getPane('pane_NativeWoodlandModel_30').style['mix-blend-mode'] = 'normal';
+        var layer_NativeWoodlandModel_30 = new L.geoJson(json_NativeWoodlandModel_30, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_NativeWoodlandModel_30',
+            layerName: 'layer_NativeWoodlandModel_30',
+            pane: 'pane_NativeWoodlandModel_30',
+            onEachFeature: pop_NativeWoodlandModel_30,
+            style: style_NativeWoodlandModel_30_0,
+        });
+        bounds_group.addLayer(layer_NativeWoodlandModel_30);
+        function pop_NationalVegetationClassification_31(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>COMMUN_CAT</strong><br />' + (feature.properties['COMMUN_CAT'] !== null ? autolinker.link(feature.properties['COMMUN_CAT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_NationalVegetationClassification_31_0(feature) {
+            switch(String(feature.properties['COMMUN_CAT'])) {
+                case 'H':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(80,123,210,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'M':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,127,136,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'CG':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,176,90,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'U':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,18,221,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'W':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'Mosaic':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,214,129,0.6)',
+                interactive: true,
+            }
+                    break;
+                case 'N/A':
+                    return {
+                pane: 'pane_NationalVegetationClassification_31',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.6)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,248,12,0.6)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_NationalVegetationClassification_31');
+        map.getPane('pane_NationalVegetationClassification_31').style.zIndex = 431;
+        map.getPane('pane_NationalVegetationClassification_31').style['mix-blend-mode'] = 'normal';
+        var layer_NationalVegetationClassification_31 = new L.geoJson(json_NationalVegetationClassification_31, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_NationalVegetationClassification_31',
+            layerName: 'layer_NationalVegetationClassification_31',
+            pane: 'pane_NationalVegetationClassification_31',
+            onEachFeature: pop_NationalVegetationClassification_31,
+            style: style_NationalVegetationClassification_31_0,
+        });
+        bounds_group.addLayer(layer_NationalVegetationClassification_31);
+        function pop_Merlinnestingarea_32(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Area </strong><br />' + (feature.properties['area'] !== null ? autolinker.link(feature.properties['area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_Merlinnestingarea_32_0 = new L.StripePattern({
+            weight: 0.7,
+            spaceWeight: 2.0,
+            color: '#4daf4a',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Merlinnestingarea_32_0.addTo(map);
+        function style_Merlinnestingarea_32_0() {
+            return {
+                pane: 'pane_Merlinnestingarea_32',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Merlinnestingarea_32_0,
+                interactive: true,
+            }
+        }
+        function style_Merlinnestingarea_32_1() {
+            return {
+                pane: 'pane_Merlinnestingarea_32',
+                opacity: 1,
+                color: 'rgba(77,175,74,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Merlinnestingarea_32');
+        map.getPane('pane_Merlinnestingarea_32').style.zIndex = 432;
+        map.getPane('pane_Merlinnestingarea_32').style['mix-blend-mode'] = 'normal';
+        var layer_Merlinnestingarea_32 = new L.geoJson.multiStyle(json_Merlinnestingarea_32, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Merlinnestingarea_32',
+            layerName: 'layer_Merlinnestingarea_32',
+            pane: 'pane_Merlinnestingarea_32',
+            onEachFeature: pop_Merlinnestingarea_32,
+            styles: [style_Merlinnestingarea_32_0,style_Merlinnestingarea_32_1,]
+        });
+        bounds_group.addLayer(layer_Merlinnestingarea_32);
+        function pop_BirdsRedListedSGP6015_33(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Species</strong><br />' + (feature.properties['Species'] !== null ? autolinker.link(feature.properties['Species'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BirdsRedListedSGP6015_33_0(feature) {
+            switch(String(feature.properties['Species'])) {
+                case 'Black grouse lek 2006 (single male)':
+                    return {
+                pane: 'pane_BirdsRedListedSGP6015_33',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/tourist_view_point.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+                    break;
+                case 'Skylark Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedListedSGP6015_33',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(112,168,0,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Song Thrush Breesing Territory':
+                    return {
+                pane: 'pane_BirdsRedListedSGP6015_33',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,0,0,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Twite Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedListedSGP6015_33',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(68,79,137,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_BirdsRedListedSGP6015_33',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(228,211,103,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_BirdsRedListedSGP6015_33');
+        map.getPane('pane_BirdsRedListedSGP6015_33').style.zIndex = 433;
+        map.getPane('pane_BirdsRedListedSGP6015_33').style['mix-blend-mode'] = 'normal';
+        var layer_BirdsRedListedSGP6015_33 = new L.geoJson(json_BirdsRedListedSGP6015_33, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BirdsRedListedSGP6015_33',
+            layerName: 'layer_BirdsRedListedSGP6015_33',
+            pane: 'pane_BirdsRedListedSGP6015_33',
+            onEachFeature: pop_BirdsRedListedSGP6015_33,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_BirdsRedListedSGP6015_33_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BirdsRedListedSGP6015_33);
+        function pop_BirdsRedAmberSGP6015_34(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Species</strong><br />' + (feature.properties['Species'] !== null ? autolinker.link(feature.properties['Species'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BirdsRedAmberSGP6015_34_0(feature) {
+            switch(String(feature.properties['Species'])) {
+                case 'Common Gull Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(175,175,175,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Curlew Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(238,238,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Grey Wagtail Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(76,193,235,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Oystercatcher Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(72,64,59,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Snipe Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(194,155,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Stonechat Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(153,117,162,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Teal Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(119,165,145,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Tree Pipit Breeding Territory':
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(193,192,75,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_BirdsRedAmberSGP6015_34',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,155,41,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_BirdsRedAmberSGP6015_34');
+        map.getPane('pane_BirdsRedAmberSGP6015_34').style.zIndex = 434;
+        map.getPane('pane_BirdsRedAmberSGP6015_34').style['mix-blend-mode'] = 'normal';
+        var layer_BirdsRedAmberSGP6015_34 = new L.geoJson(json_BirdsRedAmberSGP6015_34, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BirdsRedAmberSGP6015_34',
+            layerName: 'layer_BirdsRedAmberSGP6015_34',
+            pane: 'pane_BirdsRedAmberSGP6015_34',
+            onEachFeature: pop_BirdsRedAmberSGP6015_34,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_BirdsRedAmberSGP6015_34_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BirdsRedAmberSGP6015_34);
+        function pop_Rivers_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Rivers_2_0() {
+            return {
+                pane: 'pane_Rivers_2',
+                opacity: 1,
+                color: 'rgba(100,152,210,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Rivers_2');
+        map.getPane('pane_Rivers_2').style.zIndex = 435;
+        map.getPane('pane_Rivers_2').style['mix-blend-mode'] = 'normal';
+        var layer_Rivers_2 = new L.geoJson(json_Rivers_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Rivers_2',
+            layerName: 'layer_Rivers_2',
+            pane: 'pane_Rivers_2',
+            onEachFeature: pop_Rivers_2,
+            style: style_Rivers_2_0,
+        });
+        bounds_group.addLayer(layer_Rivers_2);
+        function pop_Otters_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Number</strong><br />' + (feature.properties['Number'] !== null ? autolinker.link(feature.properties['Number'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Otters_3_0() {
+            return {
+                pane: 'pane_Otters_3',
+                radius: 10.0,
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Otters_3');
+        map.getPane('pane_Otters_3').style.zIndex = 436;
+        map.getPane('pane_Otters_3').style['mix-blend-mode'] = 'normal';
+        var layer_Otters_3 = new L.geoJson(json_Otters_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Otters_3',
+            layerName: 'layer_Otters_3',
+            pane: 'pane_Otters_3',
+            onEachFeature: pop_Otters_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Otters_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Otters_3);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        
+        var overLayers = [
+            {
+                group:"Birds",
+                collapsed:true,
+                layers: [
+                {
+                    active: false,
+                    name:"Red Listed",
+                    icon:'<i class="icon2 icon2-red"></i>',
+                    layer:layer_BirdsRedListedSGP6015_33
+                },
+                {
+                    active: false ,
+                    name:"Red Amber Listed",
+                    icon:'<i class="icon2 icon2-amber"></i>',
+                    layer:layer_BirdsRedAmberSGP6015_34
+                },
+                {
+                    active: false,
+                    name:"Merlin nesting areas",
+                    icon:'<i class="icon icon-Merlin"></i>',
+                    layer:layer_Merlinnestingarea_32
+                },
+            ]
+            },
+            {
+                group:"Vegetation",
+                collapsed:true,
+                layers: [
+                 {
+                    active:false,
+                    collapsed:false,
+                    name:"National Vegetation Classification",
+                    icon:'<i class="icon2 icon2-NVC"></i>',
+                    layer:layer_NationalVegetationClassification_31
+
+                 },
+                 {
+                    active:false,
+                    collapsed:false,
+                    name: "National Woodland Model",
+                    icon: '<i class="icon2 icon2-NWM"></i>',
+                    layer:layer_NativeWoodlandModel_30
+
+
+                 },
+
+                ] 
+            },
+            {
+                group:"Protected areas",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"SSSI Glen Lochey",
+                    icon:'<i class="icon icon-SSSI"></i>',
+                    layer:layer_SSSIGlenLochay_29
+                  },
+                  {
+                    active:false,
+                    name:"SAC Glen Lochey",
+                    icon:'<i class="icon icon-SAC"></i>',
+                    layer:layer_SACGlenLochey_27
+                  },  
+                ]
+            
+            },
+            {
+                group:"Grazing",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"Grazing impacts on tall herb",
+                    icon:'<i class="icon3 icon3-GrTH"></i>',
+                    layer:layer_Grazingimpactsontallherb_25
+
+                  },
+                  {
+                    active:false,
+                    name:"Grazing impacts on smooth grass",
+                    icon:'<i class="icon4 icon4-GrSG"></i>',
+                    layer:layer_Grazingimpactsonsmoothgrass_24
+                  },
+                  {
+                    active:false,
+                    name:"Grazing impacts on flush",
+                    icon:'<i class="icon5 icon5-GrF"></i>',
+                    layer:layer_Grazinfimpactsonflush_23
+                  },  
+                ]
+            },
+            {
+                group:"Habitat",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"Land Cover Map 1988",
+                    icon:'<i class="icon6 icon6-LCM"></i>',
+                    layer:layer_LandCoverMapofScotland1988_21
+                  },
+                  {
+                    active:false,
+                    name:"Land Cover Map 2020",
+                    icon:'<i class="icon7 icon7-LsM"></i>',
+                    layer:layer_HabitatandLandCovermapforScotland2020_18
+
+                  },  
+                ]
+            },
+            {
+                group:"Soils and Peat",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"Peat depth",
+                    icon:'<i class="icon8 icon8-PeatD"></i>',
+                    layer:layer_PeatDepth_8
+                  },
+                  {
+                    active: false,
+                    name: "Soil types",
+                    icon:'<i class="icon9 icon9-SoilT"></i>',
+                    layer:layer_Soiltypes_20
+                  },
+                  {
+                    active:false,
+                    name:"Total Peat Carbon",
+                    icon:'<i class="icon10 icon10-TpeatC"></i>',
+                    layer:layer_TotalpeatCarbon_6
+                  },
+                  {
+                    active:false,
+                    name:"Soil profile Depth",
+                    icon:'<i class="icon11 icon11-SoilPD"></i>',
+                    layer:layer_Soilprofiledepth_7
+                  },
+                  {
+                    active:false,
+                    name:"Total Carbon Stocks at 1 meter",
+                    icon:'<i class="icon12 icon12-Cstock"></i>',
+                    layer:layer_Totalcarbonstocksat1metre_5
+                  },
+                  {
+                    active:false,
+                    name:"Total Soil Carbon",
+                    icon:'<i class="icon13 icon13-SoilC"</i>',
+                    layer:layer_TotalSoilcarbon_4
+                  },
+                  {
+                    active:false,
+                    name:"Topsoil Organic Carbon",
+                    icon:'<i class="icon14 icon14-TopS"></i>',
+                    layer:layer_TopsoilOrganicCarbon_28
+                  },
+                  {
+                    active:false,
+                    name:"Carbon and Peatland Map 2016",
+                    icon:'<i class="icon15 icon15-CPeat"></i>',
+                    layer:layer_CarbonandPeatlandMap2016_26
+                  },
+
+                ]
+            },
+            {
+                group: "Woodlands",
+                collapsed:true,
+                layers: [
+                  {
+                    active: false,
+                    name: "Native Woodlands planted 2020",
+                    icon:'<i class="icon16 icon16-NWP"></i>',
+                    layer:layer_Nativewoodlandsplanted2020_17
+                  },
+                  {
+                    active:false,
+                    name:"Mountain Willow",
+                    icon:'<i class="icon icon-Willow"></i>',
+                    layer:layer_MountainWillow_22
+                  },
+                  {
+                    active:false,
+                    name:"Tree planting monitoring",
+                    icon:'<i class="icon icon-Planted"></i>',
+                    layer:layer_Treesplanted_16
+                  },
+                  {
+                    active:false,
+                    name:"Potential New Plant Areas",
+                    icon:'<i class="icon icon-Newareas"></i>',
+                    layer:layer_Potentialnewplantareas_13
+                  },
+                  {
+                    active:false,
+                    name:"Tree Planting Compartments",
+                    icon:'<i class="icon icon-Deer"></i>',
+                    layer:layer_ExitsingDeerFences_12
+                  },
+                  {
+                    active:false,
+                    name:"Planted area 2020",
+                    icon:'<i class="icon icon-PlantedN"></i>',
+                    layer:layer_PlantedArea2020_11
+                  },  
+                ]
+            },
+            {
+                group:"Topology",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"Archeological zones",
+                    icon:'<i class="icon icon-Arc"></i>',
+                    layer:layer_Archeologicalzones_10
+                  },  
+                ]
+            },
+            {
+                group:"Hydrology",
+                collapsed:true,
+                layers: [
+                    {
+                        active:false,
+                        name:"Rivers and burns",
+                        icon:'<i class="icon icon-River"></i>',
+                        layer:layer_Rivers_2
+                    },
+                ]
+
+            },
+            {
+                group:"Animals",
+                collapsed: true,
+                layers: [
+                {
+                    active:false,
+                    name:"Badger sets",
+                    icon:'<i class="icon icon-Badger"></i>',
+                    layer:layer_Badgersets_15
+                  },
+                  {
+                    active:false,
+                    name:"Otter spraints",
+                    icon:'<i class="icon icon-Otter"></i>',
+                    layer:layer_Otters_3
+                  },
+                  {
+                    active:false,
+                    name:"Existing Stock Fences",
+                    icon:'<i class="icon icon-Fences"></i>',
+                    layer:layer_ExitingStockFences_14
+                  },
+                 
+                ]
+
+            },
+            {
+                group:"Wind analysis",
+                collapsed:true,
+                layers: [
+                  {
+                    active:false,
+                    name:"Wind Exposition",
+                    icon:'<i class="icon17 icon17-WindE"></i>',
+                    layer:layer_WindExposition_3
+                  },
+                  {
+                    active:false,
+                    name:"Wind Effect",
+                    icon:'<i class="icon17 icon17-WindEf"></i>',
+                    layer:layer_WindEffect_2
+                  },
+                  {
+                    active:false,
+                    name:"Effective Air Flow Heights",
+                    icon:'<i class="icon17 icon17-Efair"></i>',
+                    layer:layer_Effectiveairflowheights_1
+                  },  
+                ]
+            },{
+                group:"Base Maps",
+                collapsed:true,
+                layers :[
+                  {
+                    active:false,
+                    name:"OS OpenMap Local",
+                    layer:layer_OSOpenMapLocal_2
+                  },
+                  {
+                    active:false,
+                    name:"OS VectorMap District",
+                    layer:layer_OSBasemap_1
+                  },
+                  {
+                    active:false,
+                    name:"OpenStreetMap Outdoors",
+                    layer:layer_OSMOutdoors_0
+                  },  
+                ]
+            }
+        ];
+        var panelLayers = new L.Control.PanelLayers(baseMaps, overLayers, {
+            collapsibleGroups: true,
+            selectorGroup: true
+        });
+
+        map.addControl(panelLayers);
+
+
+        setBounds();
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        resetLabels([layer_Treesplanted_16,layer_NativeWoodlandModel_30,layer_NationalVegetationClassification_31]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Treesplanted_16,layer_NativeWoodlandModel_30,layer_NationalVegetationClassification_31]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Treesplanted_16,layer_NativeWoodlandModel_30,layer_NationalVegetationClassification_31]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Treesplanted_16,layer_NativeWoodlandModel_30,layer_NationalVegetationClassification_31]);
+        });
+        </script>
+    </body>
+    
+</html>
