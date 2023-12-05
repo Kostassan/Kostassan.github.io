@@ -1,0 +1,234 @@
+.icon {
+	display:inline-block;
+	margin: 2px;
+	height: 16px;
+	width: 16px;
+	background-color: #ccc;
+}
+.icon2 {
+	display: flex;
+	height: 150px;
+	width: 130px;
+    margin-left: 20px;
+    margin-top: 50px;
+	background-color: rgb(255, 255, 255);
+}
+.icon3 {
+    display: flex;
+    height: 55px;
+    width: 55px;
+    margin-left: 5px;
+    margin-top:10px;
+    background-color: rgb(255, 255, 255);
+}
+.icon4 {
+    display: flex;
+    height: 100px;
+    width: 55px;
+    margin-left: 5px;
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+}
+.icon5 {
+    display: flex;
+    height: 60px;
+    width: 50px;
+    margin-left: 10px;
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+}
+.icon6 {
+    display: flex;
+    height: 190px;
+    width: 155px;
+    margin-left: 10px;
+    margin-top: 15px;
+    background-color: rgb(255, 255, 255);
+}
+.icon7 {
+    display: flex;
+    height: 150px;
+    width: 500px;
+    margin-left: 10px;
+    margin-top: 15px;
+    background-color:rgb(255, 255, 255);
+}
+.icon8 {
+    display: flex;
+    height: 100px;
+    width: 55px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.icon9 {
+    display: flex;
+    height: 140px;
+    width: 137px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.icon10{
+    display: flex;
+    height: 140px;
+    width: 139px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.icon11{
+    display: flex;
+    height: 130px;
+    width: 75px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.icon12 {
+    display: flex;
+    height: 150px;
+    width: 173px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.icon13 {
+    display: flex;
+    height: 160px;
+    width: 159px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.icon14 {
+    display: flex;
+    height: 129px;
+    width: 224px;
+    margin-top: 25px;
+    margin-left: 5px;
+}
+.icon15 {
+    display:flex;
+    height: 108px;
+    width: 200px;
+    margin-top: 25px;
+    margin-left: 10px;
+}
+.icon16 {
+    display:flex;
+    height: 80px;
+    width: 145px;
+    margin-top: 25px;
+    margin-left: 5px;
+}
+.icon17 {
+    display: flex;
+    height: 41px;
+    width: 200px;
+    margin-top: 25px;
+    margin-left: 5px;
+}
+
+/* ICONS */
+.icon-Merlin {
+	background: url('images/icons/Merlinnestingarea_32.png') center center no-repeat;
+}
+.icon-Willow {
+    background: url('images/icons/MountainWillow_22.png') center center no-repeat;
+
+}
+.icon-Planted {
+    background: url('images/icons/Treesplanted_16.png') center center no-repeat;
+}
+.icon-Newareas {
+    background: url('images/icons/Potentialnewplantareas_13.png') center center no-repeat;
+}
+.icon-PlantedN {
+    background: url('images/icons/PlantedArea.png') center center no-repeat;
+}
+.icon-SAC {
+    background: url('images/icons/SAC.png') center center no-repeat;
+}
+.icon-SSSI {
+    background: url('images/icons/SSSI.png') center center no-repeat;
+}
+.icon-Arc {
+    background: url('images/icons/Archeologicalzones_10.png') center center no-repeat ;
+}
+.icon-Badger {
+    background: url('images/icons/Badgersets_15.png') center center no-repeat;
+}
+.icon-Fences {
+    background: url('images/icons/ExitingStockFences_14.png') center center no-repeat;
+}
+.icon-Deer {
+    background: url('images/icons/Deer.png') center center no-repeat;
+}
+.icon-Otter {
+    background: url('images/icons/Otters_3.png') center center no-repeat;
+}
+.icon-River {
+    background: url('images/icons/Rivers_2.png') center center no-repeat;
+}
+.icon2-red {
+    background: url('images/icons/RedListed.png') center center no-repeat;
+    vertical-align: middle;
+}
+.icon2-amber {
+    background: url('images/icons/amber1.png');
+}
+.icon2-NVC {
+    background: url('images/icons/NVC.png') center center no-repeat;
+}
+.icon2-NWM{
+    background: url('images/icons/NWM.png') center center no-repeat;
+}
+.icon3-GrTH {
+    background: url('images/icons/GrTH.png')center center no-repeat;
+}
+.icon4-GrSG{
+    background: url('images/icons/GrSG.png') center center no-repeat;
+}
+.icon5-GrF {
+    background: url('images/icons/GrF.png') center center no-repeat;
+}
+.icon6-LCM {
+    background: url('images/icons/LCM.png') center center no-repeat;
+}
+.icon7-LsM {
+    background: url('images/icons/LsM.png') center center no-repeat;
+}
+.icon8-PeatD {
+    background: url('images/icons/PeatD.png') center center no-repeat;
+}
+.icon9-SoilT {
+    background: url('images/icons/SoilT.png') center center no-repeat;
+}
+.icon10-TpeatC{
+    background: url('images/icons/TPeatC.png');
+}
+.icon11-SoilPD {
+    background: url('images/icons/SoilPD.png') center center no-repeat ;
+}
+.icon12-Cstock {
+    background: url('images/icons/Cstock.png') center center no-repeat;
+}
+.icon13-SoilC {
+    background: url('images/icons/SoilC.png') center center no-repeat;
+}
+.icon14-TopS{
+    background: url('images/icons/TopS.png') center center no-repeat;
+}
+.icon15-CPeat{
+    background: url('images/icons/CPeat.png') center center no-repeat;
+}
+.icon16-NWP {
+    background: url('images/icons/NWP.png') center center no-repeat;
+}
+.icon17-WindE {
+    background: url('images/icons/WindEx.png') center center no-repeat;
+}
+.icon17-Efair {
+    background: url('images/icons/Efair.png') center center no-repeat;
+}
+.icon17-WindEf {
+    background: url('images/icons/WindEf.png') center center no-repeat;
+}
+
+
+
